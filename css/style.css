@@ -15,6 +15,15 @@ body {
 body {
   min-height: 100vh;
   background: blue;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.agenda {
+  width: 40rem;
+  aspect-ratio: 1/1;
+  background: black;
 }
 
 /*# sourceMappingURL=style.css.map */
