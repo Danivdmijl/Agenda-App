@@ -79,6 +79,10 @@ class Month {
         this.agenda = agenda;
         this.agenda.render(".agenda", this.htmlElement);
     }
+
+    renderDays(placeToRender, whatToRender) {
+        this.agenda.render(placeToRender, whatToRender);
+    }
 }
 
 class Day {
@@ -87,10 +91,10 @@ class Day {
 
     constructor(month) {
         this.htmlElement = document.createElement("li");
+        this.htmlElement.classList.add("agenda__day");
         this.month = month;
+        this.month.renderDays(".agenda__month", this.htmlElement)
     }
 }
 
 const DaniAgenda = new AgendaApp();
-
- 
