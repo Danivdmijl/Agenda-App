@@ -1,9 +1,8 @@
 @use "./abstracts/colors";
+@use "./abstracts/mixins";
 
 body{
     min-height: 100vh;
-    background: blue;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    background: linear-gradient(to bottom right, #5C469C, 70%, #D4ADFC);
+    @include mixins.flexcenter;
 }

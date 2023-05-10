@@ -14,10 +14,10 @@ body {
 
 body {
   min-height: 100vh;
-  background: blue;
+  background: linear-gradient(to bottom right, #5C469C, 70%, #D4ADFC);
   display: flex;
-  align-items: center;
   justify-content: center;
+  align-items: center;
 }
 
 .agenda {
