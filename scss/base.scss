@@ -1,8 +1,10 @@
-@use "./abstracts/colors";
 @use "./abstracts/mixins";
 
 body{
-    min-height: 100vh;
-    background: linear-gradient(to bottom right, #5C469C, 70%, #D4ADFC);
-    @include mixins.flexcenter;
+    background:linear-gradient(to bottom right, #5C469C,70%,#D4ADFC);
+    min-height:100vh;
+    @include mixins.flexCenter;
+    padding:4rem;
+    font-size: 2rem;
+    font-family: sans-serif;
 }

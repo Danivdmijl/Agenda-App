@@ -34,18 +34,18 @@ class Agenda {
         this.htmlElement.classList.add("agenda");
         this.data = data;
         this.renderer = new Renderer();
-        this.renderer.render("body", this.htmlElement);
-        this.header = new Header(this, data.name);
+        this.renderer.render("body",this.htmlElement);
+        this.header = new Header(this,data.name);
         this.month = new Month(this, data.days);
     }
 
-    render(placeToRender, whatToRender) {
+    render(placeToRender,whatToRender){
         this.renderer.render(placeToRender, whatToRender);
     }
 }
 
 class Renderer {
-    render(placeToRender, whatToRender) {
+    render(placeToRender, whatToRender){
         document.querySelector(placeToRender).appendChild(whatToRender);
     }
 }
@@ -56,45 +56,63 @@ class Header {
     agenda;
     constructor(agenda, nameOfMonth) {
         this.agenda = agenda;
+        this.nameOfMonth = nameOfMonth;
         this.htmlElement = document.createElement("header");
         this.htmlElement.classList.add("agenda__header");
+        this.leftbutton = document.createElement("button");
+        this.leftbutton.innerText = "<";
+        this.leftbutton.classList = "agenda__button agenda__button--left";
+        this.text = document.createElement("h2");
+        this.text.innerText = this.nameOfMonth;
+        this.rightbutton = document.createElement("button");
+        this.rightbutton.classList = "agenda__button agenda__button--right";
+        this.rightbutton.innerText = ">";    
         this.agenda.render(".agenda", this.htmlElement);
-        this.nameOfMonth = nameOfMonth;
+
+        this.agenda.render(".agenda__header", this.leftbutton);
+        this.agenda.render(".agenda__header", this.text);
+        this.agenda.render(".agenda__header", this.rightbutton);
+
+
+
     }
 }
 
 class Month {
-    htmlElement;
-    agenda;
-    numberofDays;
     days = [];
-
-    constructor(agenda, numberofDays) {
+    agenda;
+    numberOfDays;
+    htmlElement;
+    constructor(agenda,numberOfDays) {
         this.htmlElement = document.createElement("ul");
         this.htmlElement.classList.add("agenda__month");
-        this.numberofDays = numberofDays;
-        for (let i = 0; i < numberofDays; i++) {
-            this.days.push(new Day(this));
-        }
+        this.numberOfDays = numberOfDays;
         this.agenda = agenda;
         this.agenda.render(".agenda", this.htmlElement);
+        for (let i = 1; i <= numberOfDays; i++) {
+            this.days.push(new Day(this, i));
+        }
     }
 
-    renderDays(placeToRender, whatToRender) {
+    renderDays(placeToRender,whatToRender){
         this.agenda.render(placeToRender, whatToRender);
     }
 }
 
 class Day {
-    htmlElement;
     month;
+    htmlElement;
+    dayNumber;
 
-    constructor(month) {
+    constructor(month, dayNumber) {
+        this.dayNumber = dayNumber; 
         this.htmlElement = document.createElement("li");
         this.htmlElement.classList.add("agenda__day");
+        this.htmlElement.innerText = this.dayNumber;
         this.month = month;
-        this.month.renderDays(".agenda__month", this.htmlElement)
+        this.month.renderDays(".agenda__month", this.htmlElement);
     }
+
 }
 
 const DaniAgenda = new AgendaApp();
