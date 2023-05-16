@@ -35,12 +35,12 @@ class Agenda {
         this.data = data;
         this.renderer = new Renderer();
         this.renderer.render("body",this.htmlElement);
-        this.header = new Header(this,data.name);
+        this.header = new Header(this, data.name);
         this.month = new Month(this, data.days);
     }
 
     render(placeToRender,whatToRender){
-        this.renderer.render(placeToRender, whatToRender);
+         this.renderer.render(placeToRender, whatToRender);
     }
 }
 
@@ -54,27 +54,60 @@ class Header {
     nameOfMonth;
     htmlElement;
     agenda;
+    leftbutton;
+    rightbutton;
     constructor(agenda, nameOfMonth) {
         this.agenda = agenda;
         this.nameOfMonth = nameOfMonth;
         this.htmlElement = document.createElement("header");
         this.htmlElement.classList.add("agenda__header");
-        this.leftbutton = document.createElement("button");
-        this.leftbutton.innerText = "<";
-        this.leftbutton.classList = "agenda__button agenda__button--left";
+       
+
         this.text = document.createElement("h2");
         this.text.innerText = this.nameOfMonth;
-        this.rightbutton = document.createElement("button");
-        this.rightbutton.classList = "agenda__button agenda__button--right";
-        this.rightbutton.innerText = ">";    
+
         this.agenda.render(".agenda", this.htmlElement);
 
-        this.agenda.render(".agenda__header", this.leftbutton);
+        // this.agenda.render(".agenda__header", this.leftbutton);
+        this.leftbutton = new Button("<", "agenda--left", this);
         this.agenda.render(".agenda__header", this.text);
-        this.agenda.render(".agenda__header", this.rightbutton);
+        this.rightbutton = new Button(">", "agenda--right",this);
+        // this.agenda.render(".agenda__header", this.rightbutton);
+    }
 
+    render(placeToRender, whatToRender) {
+        this.agenda.render(placeToRender, whatToRender);
+    }
+}
 
+class Button{
+    htmlElement;
+    innerText;
+    extraclass;
+    switcher;
+    header;
+    constructor(innerText, extraclass, header) {
+        this.header = header;
+        this.htmlElement = document.createElement("button");    
+        this.htmlElement.classList.add("agenda__button");
+        this.extraclass = extraclass;
+        this.htmlElement.classList.add(this.extraclass);
+        this.innerText = innerText;
+        this.htmlElement.innerText = this.innerText;
+        this.switcher = new Switcher(this.extraclass);
 
+        this.render();
+    }
+
+    render() {
+        this.header.render(".agenda__header",this.htmlElement)
+    }
+}
+
+class Switcher {
+    text;
+    constructor(text) {
+        this.text = text;
     }
 }
 
