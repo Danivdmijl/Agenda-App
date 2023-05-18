@@ -1,11 +1,11 @@
 class AgendaApp {
     api;
-    agenda;
-
+    switcher;
     constructor() {
         this.api = new API();
+        this.switcher = new Switcher(this);
         this.api.getData().then(result => {
-            this.agenda = new Agenda(result[0]);
+            this.switcher.loadAgenda(result[0]);
         })
     }
 }
@@ -28,14 +28,16 @@ class Agenda {
     header;
     month;
     htmlElement;
+    agendaApp;
 
-    constructor(data) {
+    constructor(data, agendaApp) {
+        this.agendaApp = agendaApp;
         this.htmlElement = document.createElement("article");
         this.htmlElement.classList.add("agenda");
         this.data = data;
         this.renderer = new Renderer();
         this.renderer.render("body",this.htmlElement);
-        this.header = new Header(this, data.name);
+        this.header = new Header(this, data.name, this.agendaApp);
         this.month = new Month(this, data.days);
     }
 
@@ -56,8 +58,9 @@ class Header {
     agenda;
     leftbutton;
     rightbutton;
-    constructor(agenda, nameOfMonth) {
+    constructor(agenda, nameOfMonth, agendaApp) {
         this.agenda = agenda;
+        this.agendaApp = agendaApp;
         this.nameOfMonth = nameOfMonth;
         this.htmlElement = document.createElement("header");
         this.htmlElement.classList.add("agenda__header");
@@ -69,9 +72,9 @@ class Header {
         this.agenda.render(".agenda", this.htmlElement);
 
         // this.agenda.render(".agenda__header", this.leftbutton);
-        this.leftbutton = new Button("<", "agenda--left", this);
+        this.leftbutton = new Button("<", "agenda--left",this, this.agendaApp);
         this.agenda.render(".agenda__header", this.text);
-        this.rightbutton = new Button(">", "agenda--right",this);
+        this.rightbutton = new Button(">", "agenda--right",this,this.agendaApp);
         // this.agenda.render(".agenda__header", this.rightbutton);
     }
 
@@ -86,17 +89,24 @@ class Button{
     extraclass;
     switcher;
     header;
-    constructor(innerText, extraclass, header) {
+    constructor(innerText, extraclass, header, agendaApp) {
         this.header = header;
+        this.agendaApp = agendaApp;
         this.htmlElement = document.createElement("button");    
         this.htmlElement.classList.add("agenda__button");
         this.extraclass = extraclass;
         this.htmlElement.classList.add(this.extraclass);
         this.innerText = innerText;
         this.htmlElement.innerText = this.innerText;
-        this.switcher = new Switcher(this.extraclass);
+        // this.switcher = new Switcher(this.extraclass);
 
         this.render();
+
+        this.htmlElement.onclick = this.buttonClicked;
+    }
+
+    buttonClicked = () => {
+        console.log(this.agendaApp);
     }
 
     render() {
@@ -105,9 +115,19 @@ class Button{
 }
 
 class Switcher {
-    text;
-    constructor(text) {
-        this.text = text;
+    loadAgenda;
+    agendaApp;
+    agenda;
+    constructor(agendaApp){
+        this.agendaApp = agendaApp
+    }
+
+    loadAgenda = (data) =>{
+        this.agenda = new Agenda(data, this.agendaApp);
+    }
+
+    clicked = (type) => {
+        console.log("ik moet naar", type);
     }
 }
 
