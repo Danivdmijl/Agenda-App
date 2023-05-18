@@ -1,12 +1,34 @@
 class AgendaApp {
     api;
     switcher;
+    month = 0;
     constructor() {
         this.api = new API();
         this.switcher = new Switcher(this);
         this.api.getData().then(result => {
-            this.switcher.loadAgenda(result[0]);
-        })
+            this.switcher.loadAgenda(result[this.month]);
+        });
+    }
+
+    switchMonths = (sign) =>{
+        switch(sign){
+        case "+":
+            this.month = this.month + 1;
+            break;
+            case "-":
+                this.month = this.month - 1;
+                break;
+        }
+
+        if(this.month === 12){
+            this.month = 0;
+        }
+
+        if(this.month < 0){
+            this.month = 11;
+        }
+
+        this.switcher.loadAgenda(this.api.dataFromAPI[this.month]);
     }
 }
 
@@ -72,9 +94,9 @@ class Header {
         this.agenda.render(".agenda", this.htmlElement);
 
         // this.agenda.render(".agenda__header", this.leftbutton);
-        this.leftbutton = new Button("<", "agenda--left",this, this.agendaApp);
+        this.leftbutton = new Button("previous", "<", "agenda--left",this, this.agendaApp);
         this.agenda.render(".agenda__header", this.text);
-        this.rightbutton = new Button(">", "agenda--right",this,this.agendaApp);
+        this.rightbutton = new Button("next", ">", "agenda--right",this,this.agendaApp);
         // this.agenda.render(".agenda__header", this.rightbutton);
     }
 
@@ -89,7 +111,9 @@ class Button{
     extraclass;
     switcher;
     header;
-    constructor(innerText, extraclass, header, agendaApp) {
+    type;
+    constructor(type, innerText, extraclass, header, agendaApp) {
+        this.type = type;
         this.header = header;
         this.agendaApp = agendaApp;
         this.htmlElement = document.createElement("button");    
@@ -106,7 +130,11 @@ class Button{
     }
 
     buttonClicked = () => {
-        console.log(this.agendaApp);
+        if(this.type === "previous"){
+            this.agendaApp.switchMonths("-");
+            return;
+        }
+        this.agendaApp.switchMonths("+");
     }
 
     render() {
@@ -115,14 +143,16 @@ class Button{
 }
 
 class Switcher {
-    loadAgenda;
     agendaApp;
     agenda;
+    cleaner;
     constructor(agendaApp){
-        this.agendaApp = agendaApp
+        this.agendaApp = agendaApp;
+        this.cleaner = new Cleaner();
     }
 
     loadAgenda = (data) =>{
+        this.cleaner.clean("body");
         this.agenda = new Agenda(data, this.agendaApp);
     }
 
@@ -167,5 +197,12 @@ class Day {
     }
 
 }
+
+class Cleaner{
+    clean(whereToClean){
+        document.querySelector(whereToClean).innerHTML = "";
+    }
+}
+
 
 const DaniAgenda = new AgendaApp();
