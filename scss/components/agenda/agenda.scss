@@ -5,6 +5,9 @@
     aspect-ratio: 1/1;
     background:#eee;
     border-radius: 2rem;
+    position: fixed;
+    right: 4rem;
+    bottom: 4rem;
 
     &__header{
         background: #E74646;
@@ -31,6 +34,7 @@
         padding:2rem;
         display:grid;
         grid-template-columns: repeat(7,1fr);
+        grid-template-rows: repeat(5,1fr);
         gap:1rem;
         list-style: none;
     }
@@ -47,3 +51,4 @@
         }
     }
 }
+
